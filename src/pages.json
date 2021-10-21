@@ -3,19 +3,8 @@
 		{
 			"path": "pages/news/news-list/news-list",
 			"style": {
-				"navigationBarTitleText": "长列表"
-			}
-		},
-		{
-			"path": "pages/news/news-detail/news-detail",
-			"style": {
-				"navigationBarTitleText": "详情"
-			}
-		},
-		{
-			"path": "pages/index/index",
-			"style": {
-				"navigationBarTitleText": "uni-app"
+				"navigationBarTitleText": "长列表",
+				"enablePullDownRefresh": true
 			}
 		}
 	],
@@ -25,5 +14,36 @@
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
-	"subPackages": []
+	"subPackages": [
+		{
+			"name":"details",
+			"root":"details",
+			 "pages": [{
+			 		"path": "news-detail/news-detail",
+			 		"style": {
+			 			"navigationBarTitleText": "详情",
+						"enablePullDownRefresh": false
+			 		}
+			 	}
+			]
+		},
+		{
+			"name":"hello",
+			"root":"hello",
+			 "pages": [{
+			 		"path": "index/index",
+			 		"style": {
+			 			"navigationBarTitleText": "hello world",
+						"enablePullDownRefresh": false
+			 		}
+			 	}
+			]
+		}
+	],
+	"preloadRule": {
+	    "pages/news/news-list/news-list": {
+	      "network": "all",
+	      "packages": ["details"]
+	    }
+	}
 }

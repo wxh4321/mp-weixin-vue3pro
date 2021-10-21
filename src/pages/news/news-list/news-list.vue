@@ -32,15 +32,19 @@
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	import { dateUtils } from  '../../../common/util.js';
-
-	export default {
+	import { computed, defineComponent, reactive, toRefs,ref, 
+	 onMounted,onBeforeMount,onBeforeUpdate,onUpdated,onBeforeUnmount,onUnmounted,onRenderTracked,
+	 onRenderTriggered
+	} from 'vue';
+	
+	export default defineComponent({
 		components: {
 			uniLoadMore
 		},
 		data() {
-			return {
-				banner: {},
-				listData: [],
+			return{
+				banner:{},
+				listData:[],
 				last_id: '',
 				reload: false,
 				status: 'more',
@@ -50,12 +54,97 @@
 					contentrefresh: '加载中',
 					contentnomore: '没有更多'
 				}
+			}
+		},
+		setup() {
+			// console.log('setup')
+			// onBeforeMount(() => {
+			// console.log('onBeforeMount')
+			// })
+			// onMounted(() => {
+			// console.log('onMounted')
+			// })
+			// onBeforeUpdate(() => {
+			// console.log('onBeforeUpdate')
+			// })
+			// onUpdated(() => {
+			// console.log('onUpdated')
+			// })
+			// onBeforeUnmount(() => {
+			// console.log('onBeforeUnmount')
+			// })
+			// onUnmounted(() => {
+			// console.log('onUnmounted')
+			// })
+			// onRenderTracked((event) => {
+			//   console.log("状态跟踪组件----------->");
+			//   console.log(event);
+			// })
+			// onRenderTriggered((event) => {
+			//   console.log("状态触发组件--------------->");
+			//   console.log(event);
+			// })
+			
+			const record = reactive({ name: "test reactive", count: 0,value:100 }); // 处理复杂响应式,ref用于基本数据类型,reactive处理复杂类型
+			const increase = () => {
+			  ++record.count
+			}
+			const nextCount = computed(() => {
+			  return +record.count + 10
+			});
+			const changenextCount = computed({
+			  get() {
+				 return +record.value + 100
+			  },
+			  set(value) {
+				console.log('set value : ', value)  //  输出新修改的值
+				return record.value = value -100
+			  }
+			});
+			// 函数往下写
+			const testJZApi = () => {
+				console.log('start ...');
+				const data = {
+					"curpage":"1",
+					"catalogid": "2",
+					"curpage": "1",
+					"funcNo": "200000",
+					"market": "SZ",
+					"market_stockCode": "30107",
+					"query_flag": "2",
+					"rowofpage": "20",
+					"stock_code": "301078",
+					"urlName": "INFO_URL"
+				};
+				uni.request({
+					url: 'http://jzcapph5.com/servlet/json?curpage=1&query_flag=2&market=SZ&urlName=INFO_URL&rowofpage=20&funcNo=200000&catalogid=2&stock_code=301078&market_stockCode=30107',
+					header: {
+						'content-type': 'application/json'
+					},
+					method:'POST',
+					data: data,
+					success: data => {
+						console.log('data : ',data);
+					},
+					fail: (data, code) => {
+						console.log('fail' + JSON.stringify(data));
+					}
+				});
+			}
+			
+			return {
+				record, 
+				nextCount,
+				increase,
+				changenextCount,
+				testJZApi
 			};
 		},
 		onLoad() {
 			this.adpid = this.$adpid;
 			this.getBanner();
 			this.getList();
+			this.testJZApi();
 		},
 		onPullDownRefresh() {
 			this.reload = true;
@@ -125,8 +214,13 @@
 					published_at: e.published_at,
 					title: e.title
 				};
+				this.increase();
+				console.log('this.record.count nextCount changenextCount ',this.record.count,this.nextCount,this.changenextCount);
+				this.changenextCount = 10;
+				console.log('changenextCount record.value ',this.changenextCount,this.record.value);
 				uni.navigateTo({
-					url: '../news-detail/news-detail?detailDate=' + encodeURIComponent(JSON.stringify(detail))
+					url: '/details/news-detail/news-detail?detailDate=' + encodeURIComponent(JSON.stringify(detail))
+					// url:'/hello/index/index'
 				});
 			},
 			setTime: function(items) {
@@ -147,7 +241,7 @@
 				console.log("aderror: " + JSON.stringify(e.detail));
 			}
 		}
-	};
+});
 </script>
 
 <style>
@@ -175,7 +269,13 @@
 		color: white;
 		z-index: 11;
 	}
-
+	.uni-media-list {
+		background-color: red;
+		box-sizing: border-box;
+		display: flex;
+		width: 100%;
+		flex-direction: row;
+	}
 	.uni-media-list-logo {
 		width: 180rpx;
 		height: 140rpx;
