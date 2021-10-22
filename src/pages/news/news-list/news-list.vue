@@ -32,7 +32,9 @@
 <script>
 	import uniLoadMore from '@/components/uni-load-more/uni-load-more.vue';
 	import { dateUtils } from  '../../../common/util.js';
-	import { computed, defineComponent, reactive, toRefs,ref, 
+	import { dispatchAction,getStoreGetter,setStoreState,commitMutation } from '@/store/utils';
+	
+	import { computed, defineComponent, reactive, toRefs,ref,getCurrentInstance, 
 	 onMounted,onBeforeMount,onBeforeUpdate,onUpdated,onBeforeUnmount,onUnmounted,onRenderTracked,
 	 onRenderTriggered
 	} from 'vue';
@@ -62,7 +64,7 @@
 			// console.log('onBeforeMount')
 			// })
 			// onMounted(() => {
-			// console.log('onMounted')
+			// 	console.log('onMounted');
 			// })
 			// onBeforeUpdate(() => {
 			// console.log('onBeforeUpdate')
@@ -84,7 +86,9 @@
 			//   console.log("状态触发组件--------------->");
 			//   console.log(event);
 			// })
-			
+			const instance = getCurrentInstance();
+			const { appContext } = instance;
+			const store = appContext.config.globalProperties.$store;
 			const record = reactive({ name: "test reactive", count: 0,value:100 }); // 处理复杂响应式,ref用于基本数据类型,reactive处理复杂类型
 			const increase = () => {
 			  ++record.count
@@ -133,7 +137,27 @@
 			}
 			
 			const testStoreContent = () => {
-				console.log($store);
+				// console.log('instance ',instance);
+				// console.log('appContext.config.globalProperties ',appContext.config.globalProperties)
+				// console.log('store ',store,store.state.news);
+				// const func = async () => {
+				// 	await dispatchAction('news','getTestData',['abc','d'])
+				// }
+				// func();
+				// 异步方法
+				const func = async () => {
+					await dispatchAction('news','getTestData',['abc','d'])
+				}
+				// func();
+				// 同步状态
+				// commitMutation('news','updateBackPathList',['ff','ggg']);
+				console.log('getStoreGetter ',getStoreGetter('news','getTestNewsGetter'));
+				setStoreState('news','roleList',['test setStoreState','111']);
+				setTimeout(()=>{
+					console.log('store ',store.state.news.roleList);
+				},800)
+				
+				
 			}
 			
 			return {

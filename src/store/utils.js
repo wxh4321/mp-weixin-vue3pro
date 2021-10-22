@@ -52,3 +52,11 @@ export function dispatchAction(
 export function getStoreGetter(module, key) {
   return store.getters[`${module}/${key}`]
 }
+
+export function commitMutation(
+  module,
+  key,
+  value
+) {
+  return store.commit(`${module}/${key}`, value)
+}

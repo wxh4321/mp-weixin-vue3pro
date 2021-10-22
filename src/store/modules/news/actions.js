@@ -4,7 +4,8 @@ import { Store } from 'vuex'
 // import ManageService from '@/api/manage'
 
 const newsActions = {
-  async getTestData(){
+  async getTestData(context,params){
+	  console.log('getTestData ',context,params);
 	  setStoreState('news', 'roleList', ['hello man'])
   },
   // // 获取用户角色列表

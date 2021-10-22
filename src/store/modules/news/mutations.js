@@ -6,7 +6,9 @@ export default {
   __set(state, msg) {
     state[msg.key] = msg.val
   },
-  updateBackPathList() {
+  updateBackPathList(context,params) { // 同步状态
+	  console.log('updateBackPathList ',context,params);
+	  setStoreState('news', 'roleList', ['hello mutations'])
     // const backPathList = store.state.console.backPathList
     // const currentPath = router.currentRoute.value.fullPath
     // const newBackPathList = [...backPathList]
