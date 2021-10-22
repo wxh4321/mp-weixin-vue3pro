@@ -132,19 +132,26 @@
 				});
 			}
 			
+			const testStoreContent = () => {
+				console.log($store);
+			}
+			
 			return {
 				record, 
 				nextCount,
 				increase,
 				changenextCount,
-				testJZApi
+				testJZApi,
+				testStoreContent
 			};
 		},
 		onLoad() {
+			// console.log('p-weixin onload');
 			this.adpid = this.$adpid;
 			this.getBanner();
 			this.getList();
-			this.testJZApi();
+			// this.testJZApi();
+			this.testStoreContent();
 		},
 		onPullDownRefresh() {
 			this.reload = true;
@@ -270,7 +277,7 @@
 		z-index: 11;
 	}
 	.uni-media-list {
-		background-color: red;
+		/* background-color: red; */
 		box-sizing: border-box;
 		display: flex;
 		width: 100%;
